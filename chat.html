@@ -1,46 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>チャットルーム</title>
-</head>
-<body>
-  <div id="chat-room">
-    <div id="messages"></div>
-    <input id="message-input" type="text" placeholder="メッセージを入力...">
-    <button id="send-button">送信</button>
-  </div>
+const messagesRef = ref(db, "messages");
 
-  <script type="module">
-    // あなたのFirebase構成をここに貼り付け
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-database.js";
+// 送信ボタンの動作確認
+document.getElementById("send-button").addEventListener("click", () => {
+  const message = document.getElementById("message-input").value;
+  if (message) {
+    push(messagesRef, { text: message }); // メッセージを送信
+    console.log("メッセージ送信:", message); // ログに出力
+  }
+});
 
-    const firebaseConfig = { /* 上記のfirebaseConfigをここに挿入 */ };
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    const messagesRef = ref(db, "messages");
-
-    // メッセージを送信
-    document.getElementById("send-button").addEventListener("click", () => {
-      const message = document.getElementById("message-input").value;
-      if (message) {
-        push(messagesRef, { text: message });
-        document.getElementById("message-input").value = "";
-      }
-    });
-
-    // メッセージをリアルタイムで受信
-    onValue(messagesRef, (snapshot) => {
-      const messagesDiv = document.getElementById("messages");
-      messagesDiv.innerHTML = ""; // 古いメッセージをリセット
-      snapshot.forEach((childSnapshot) => {
-        const message = childSnapshot.val().text;
-        const messageElement = document.createElement("div");
-        messageElement.textContent = message;
-        messagesDiv.appendChild(messageElement);
-      });
-    });
-  </script>
-</body>
-</html>
+// メッセージ受信部分
+onValue(messagesRef, (snapshot) => {
+  console.log("メッセージリスト受信");
+  snapshot.forEach((childSnapshot) => {
+    console.log(childSnapshot.val());
+  });
+});
