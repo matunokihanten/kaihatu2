@@ -1,24 +1,46 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase チャットルーム</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        ul { list-style: none; padding: 0; }
-        li { padding: 8px; background: #f4f4f4; margin: 5px 0; }
-        input { padding: 10px; width: 70%; margin-right: 5px; }
-    </style>
+  <title>チャットルーム</title>
 </head>
 <body>
-    <h1>Firebase チャットルーム</h1>
-    <ul id="messages"></ul>
-    <form id="form">
-        <input id="username" placeholder="ユーザー名" required>
-        <input id="message" placeholder="メッセージ" required>
-        <button type="submit">送信</button>
-    </form>
-    <script type="module" src="./chat.js"></script>
+  <div id="chat-room">
+    <div id="messages"></div>
+    <input id="message-input" type="text" placeholder="メッセージを入力...">
+    <button id="send-button">送信</button>
+  </div>
+
+  <script type="module">
+    // あなたのFirebase構成をここに貼り付け
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-database.js";
+
+    const firebaseConfig = { /* 上記のfirebaseConfigをここに挿入 */ };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const messagesRef = ref(db, "messages");
+
+    // メッセージを送信
+    document.getElementById("send-button").addEventListener("click", () => {
+      const message = document.getElementById("message-input").value;
+      if (message) {
+        push(messagesRef, { text: message });
+        document.getElementById("message-input").value = "";
+      }
+    });
+
+    // メッセージをリアルタイムで受信
+    onValue(messagesRef, (snapshot) => {
+      const messagesDiv = document.getElementById("messages");
+      messagesDiv.innerHTML = ""; // 古いメッセージをリセット
+      snapshot.forEach((childSnapshot) => {
+        const message = childSnapshot.val().text;
+        const messageElement = document.createElement("div");
+        messageElement.textContent = message;
+        messagesDiv.appendChild(messageElement);
+      });
+    });
+  </script>
 </body>
 </html>
