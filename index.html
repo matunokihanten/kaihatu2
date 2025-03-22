@@ -1,37 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>拡張デモ: エスケープコードと便利な機能の統合</title>
+  <style>
+    :root {
+      --background-color: #fff;
+      --text-color: #333;
+      --border-color: #ccc;
+      --pre-background: #f9f9f9;
+    }
+    .dark-theme {
+      --background-color: #2e2e2e;
+      --text-color: #eee;
+      --border-color: #555;
+      --pre-background: #444;
+    }
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      line-height: 1.6;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .section { 
+      border: 1px solid var(--border-color); 
+      padding: 15px; 
+      margin-bottom: 20px; 
+    }
+    pre { 
+      background-color: var(--pre-background); 
+      padding: 10px; 
+      overflow-x: auto; 
+    }
+    textarea { width: 100%; height: 100px; padding: 5px; }
+    button { margin-top: 10px; padding: 5px 10px; }
+    h2 { color: var(--text-color); }
+    .btn-group {
+      margin-top: 10px;
+    }
+    .copy-btn {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="toggleTheme()">ダーク/ライト切り替え</button>
+  <h1>拡張デモ: エスケープコードと便利な機能の統合</h1>
+  
+  <!-- Section 1: コードスニペット共有 -->
+  <div class="section" id="snippet-sharing">
+    <h2>1. コードスニペット共有</h2>
+    <p>
+      コードを入力すると、エスケープされたコードとして下に表示されます。ユーザーが安全にコードを投稿・共有できます。
+    </p>
+    <textarea id="shareInput" placeholder="ここにコードを入力してください"></textarea>
+    <div class="btn-group">
+      <button onclick="shareCode()">コードを共有する</button>
+      <button onclick="clearInput('shareInput', 'shareOutput')">リセット</button>
+    </div>
+    <div id="shareOutput"></div>
+  </div>
+  
+  <!-- Section 2: オンラインセキュリティチュートリアル -->
+  <div class="section" id="security-tutorial">
+    <h2>2. HTMLエスケープの重要性セミナー</h2>
+    <p>
+      HTMLエスケープは、悪意あるコードの注入を防ぐための基本技術です。実例を比較して、セキュリティ面の重要性を理解しましょう。
+    </p>
+    <h3>生のコードの例</h3>
+    <div style="border:1px dashed var(--border-color); padding: 10px;">
+      <script>
+        document.write("これは実行されるコードです。");
+      </script>
+    </div>
+    <h3>エスケープされたコードの例</h3>
+    <pre>&lt;script&gt;document.write("これは実行されるコードです。");&lt;/script&gt;</pre>
+  </div>
 
+  <!-- Section 3: リアルタイムコード比較ツール -->
+  <div class="section" id="code-comparison">
+    <h2>3. リアルタイムコード比較ツール</h2>
+    <p>
+      入力されたコードの実行結果とエスケープされたソース表示をリアルタイムで比較できます。
+    </p>
+    <textarea id="compareInput" placeholder="ここにコードを入力してください" oninput="compareCode()"></textarea>
+    <div class="btn-group">
+      <button onclick="clearInput('compareInput', 'renderOutput', 'escapeOutput')">リセット</button>
+    </div>
+    <h3>実行版 (レンダリング結果)：</h3>
+    <div id="renderOutput" style="border:1px solid var(--border-color); padding:10px;"></div>
+    <button class="copy-btn" onclick="copyToClipboard('renderOutput')">コピー実行結果</button>
+    <h3>エスケープ版 (ソース表示)：</h3>
+    <pre id="escapeOutput"></pre>
+    <button class="copy-btn" onclick="copyToClipboard('escapeOutput', true)">コピーエスケープ版</button>
+  </div>
 
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>脳トレ部屋 | 松乃木飯店</title><meta name="description" content="ホームページ管理者が一生懸命作りました"><link rel="stylesheet" href="/static/js/slick/slick.css"><link rel="stylesheet" href="/static/css/default_style.css?1742621170.0424142"><link rel="stylesheet" href="/static/css/color014.css?1742621170.0424142"><link rel="stylesheet" href="/static/css/parts_style.css?1742621170.0424142"><link rel="stylesheet" href="/static/css/fontawesome_all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/static/css/obistyle.css?1742621170.0424142"><link rel="stylesheet" href="/static/css/protectionstyle.css?1742621170.0424142"><link rel="stylesheet" href="/static/js/colorbox/colorbox.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/static/js/jquery-modal/jquery.modal.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/static/js/jquery-fancybox/jquery.fancybox.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/static/css/blog.css?1742621170.0424142"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Noto+Serif+JP&family=M+PLUS+1p&family=M+PLUS+Rounded+1c&family=Sawarabi+Mincho&family=Sawarabi+Gothic&family=Kosugi+Maru&family=Kosugi&family=Yusei+Magic&family=Hachi+Maru+Pop&family=Potta+One&family=DotGothic16&family=RocknRoll+One&family=Stick&family=Reggae+One&display=swap" media="print" onload="this.media='all'"><meta name="format-detection" content="telephone=no"><meta name="referrer" content="no-referrer-when-downgrade"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /><meta property="og:title" content="脳トレ部屋 | 松乃木飯店"/><meta property="og:type" content="website"/><meta property="og:url" content="https://ldbyq.crayonsite.com/p/61/"/><meta property="og:site_name" content="松乃木飯店"/><meta property="og:description" content="ホームページ管理者が一生懸命作りました"/><meta property="og:image" content="https:"/><link rel="icon" href="//crayonimg.e-shops.jp/cms-dimg/1124499/905735/401_101.png" sizes="48x48" type="image/png" media="all"><link rel="apple-touch-icon-precomposed" href="//crayonimg.e-shops.jp/cms-dimg/1124499/905735/401_101.png" type="image/png" media="all"><script src="/static/js/jquery-1.11.2.min.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-90577940-2"></script><script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Section 4: 自動エスケープ・セキュリティ診断ツール -->
+  <div class="section" id="security-diagnostic">
+    <h2>4. 自動エスケープ・セキュリティ診断ツール</h2>
+    <p>
+      入力されたコードに潜む危険性を検出します。簡易診断で、&lt;script&gt; タグやインラインイベントハンドラなどの危険なパターンに警告を表示します。
+    </p>
+    <textarea id="securityInput" placeholder="コードを入力してください"></textarea>
+    <div class="btn-group">
+      <button onclick="diagnoseSecurity()">診断する</button>
+      <button onclick="clearInput('securityInput', 'diagnosisOutput')">リセット</button>
+    </div>
+    <div id="diagnosisOutput" style="margin-top:10px; white-space: pre-wrap;"></div>
+  </div>
 
-  gtag('config', 'UA-90577940-2');
-</script><script>
-      var CMS_API_URL = "";
-      var SHOP_ID = 1124499;
-      var CSRF_TOKEN = 'ryGBAnAGO9xbX1u7IAvW3XDluqwqpaFkYkKz5RBXbLiHZTFE28I7eutRFJjmQwkh';
-    </script></head><body class="t-obi obi-color14  " style=""><header class="obiHeader " style=""><div class="obiHeaderInner"><ul id="obinav" class="obiHederNavigation"><li class="naviColorMenu_Bright"><a href="/" title="トップ　" ><span class="" style="">トップ　</span></a></li><li class="naviColorMenu_Bright"><a href="https://www.amazon.co.jp/ref=as_li_ss_tl?&amp;_encoding=UTF8&amp;linkCode=sl2&amp;tag=matunokihan05-22&amp;linkId=cf69714f8c8dd3e4dd92f9b7a6369b18&amp;language=ja_JP" title="amazon" ><span class="" style="">amazon</span></a></li><li class="naviColorMenu_Bright"><a href="https://cr-reserve.e-shops.jp/menu/2049/" title="ご予約申し込み" ><span class="" style="">ご予約申し込み</span></a></li><li class="naviColorMenu_Bright"><a href="/p/8/" title="お問い合わせ" ><span class="" style="">お問い合わせ</span></a></li><li class="naviColorMenu_Bright"><a href="/p/6/" title="持ち帰り専用ページ" ><span class="" style="">持ち帰り専用ページ</span></a></li><li class="naviColorMenu_Bright"><a href="http://linoit.com/users/matunokihanten/canvases/%E6%9D%BE%E4%B9%83%E6%9C%A8%E9%A3%AF%E5%BA%97%E4%BB%98%E7%AE%8B" title="付箋" ><span class="" style="">付箋</span></a></li><li class="naviColorMenu_Bright"><a href="/p/31/" title="管理人の部屋" ><span class="" style="">管理人の部屋</span></a></li><li class="naviColorMenu_Bright"><a href="/blog/" title="ブログ" ><span class="" style="">ブログ</span></a></li><li class="naviColorMenu_Bright"><a href="/p/61/" title="脳トレ部屋" ><span class="" style="">脳トレ部屋</span></a></li></ul><a id="obiRighter" class="oviHeadRighter  naviColorMenu_Bright" href="#" style="display:none;color:">»</a></div></header><div class="l-pageWrap"><div id="header" class="obiSita"><div class="hd_area mgb_20"><a href="/"><div class="hptn3 "><h1><img src="//crayonimg.e-shops.jp/cms-dimg/1124499/1907677/401_101.png" alt="松乃木飯店"></h1></div></a></div></div><script src="/static/js/header_height_auto.js"></script><script>setImgHeight();</script><div class="articleBox mgb_20  " style=""><div id="container" class="" style=""><div class="text_area mgb_20"><h2 class="editchar clr15 line_m bold  bd_n" style="font-family:&#x27;Hachi Maru Pop&#x27;, cursive;font-size:59px;">脳トレ部屋</h2></div><!-- text_area --><div class="list_area mgb_20"><ul class="list0 "><li class="listh bclr84 xlchar" style=""><div class="txt htxt line_m bld " style="">脳トレなど</div></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/kioku2" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">追跡漢字記憶ゲーム</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/men2.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">担々麺作りゲーム</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/sinkei.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">神経衰弱</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/akadamaidou.html" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">移動する赤玉※触ると玉が消えるよ</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/dotukado" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">ドッツカード</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/irosagasi" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">色探しゲーム　※少しずつ難しくなります</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/irosagasi2" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">色探しゲーム　レベル選択式</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/syunnkann" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">瞬間記憶ゲーム</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/suujikioku" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">数字記憶ゲーム（瞬間記憶型）</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/2suujikioku" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">数字記憶ゲーム（記憶追跡型）</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/suujisagasi" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">重複数字探しゲーム</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/kiriperin" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">クリペリン検査</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/sutereo" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">ステレオグラムゲーム</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/sutereo3" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">ステレオグラムゲーム※色付きあり</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li></ul></div><div class="list_area mgb_20"><ul class="list0 list4"><li class="listh bclr23 xlchar" style=""><div class="txt htxt line_m bld " style="">見るだけ脳トレ</div></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/blinkingBall.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">玉点滅※ボタン多数</div><div class="arws"><img src="/static/img/arrow3.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/blinkingBall3.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">玉点滅※自己開発</div><div class="arws"><img src="/static/img/arrow3.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/blinkingBall4.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">玉点滅※新自己開発</div><div class="arws"><img src="/static/img/arrow3.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/blinkingBall2.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">玉点滅※設定可能</div><div class="arws"><img src="/static/img/arrow3.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/uzumaki.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">渦巻き※心の疲れの消去効果</div><div class="arws"><img src="/static/img/arrow3.png"></div></a></li></ul></div><div class="list_area mgb_20"><ul class="list0 "><li class="listh bclr25 clr11 xlchar" style=""><div class="txt htxt line_m bld uline" style="">仕事で使える小道具</div></li><li class="bclr43 lchar" style=""><a href="https://matunokihanten.github.io/sigoto/dentaku" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">高機能電卓※飲食店専用</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr43 lchar" style=""><a href="https://matunokihanten.github.io/sigoto/keijiban" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">マインドマップ式掲示板メモ帳※機能がありすぎ</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr43 lchar" style=""><a href="https://matunokihanten.github.io/sigoto/kousokumemo.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">高速メモ※とにかく速さ重視</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr43 lchar" style=""><a href="https://matunokihanten.github.io/sigoto/botansettei.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">高速実行ボタン製造機※PC用</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr43 lchar" style=""><a href="https://matunokihanten.github.io/sigoto/aikon" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">高速アイコン作成※ SVG ＆ ICO 出力形式も対応</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li></ul></div><div class="img_area mgb_20 img_extension extension_position_center"><a href="https://matunokihanten.github.io/kaihatu1/" class="imgbd img80 bd_n posi_c" style="" target="_blank" rel="noopener noreferrer"><div class="imgtrm"><img src="//crayonimg.e-shops.jp/cms-dimg/1124499/2644271/64_64.png" alt=""></div></a></div><div class="free_area"><script type="text/javascript" src="//36500632.ranking.fc2.com/analyze.js" charset="utf-8"></script></div><!-- text_area --><div class="free_area"><!-- FC2カウンター ここから -->
-現在の閲覧者数:<script language="javascript" type="text/javascript" src="//counter1.fc2.com/views.php?id=89511217"></script><noscript><img src="//counter1.fc2.com/counter_now.php?id=89511217" /></noscript><!-- FC2カウンター ここまで --></div><!-- text_area --><div class="free_area"><script src="//accaii.com/matunoki/script.js" async></script><noscript><img src="//accaii.com/matunoki/script?guid=on"></noscript></div><!-- text_area --><div class="free_area"><a href="//accaii.com/matunoki/"><img src="//accaii.com/matunoki/counter.png" style="width:240px;height:45px;vertical-align:middle;" /></a></div><!-- text_area --></div></div></div><div id="footer"><div class="ft_area " style=""><div class="obiFooterInner"><div class="snstable"><div class="l-snsButton sns_l line_m"><a href="https://twitter.com/matunokihanten" data-sns="twitter" target="_blank" class="snsButton2 sns_X "><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 408.79"><path d="M238.05 173.09 386.96 0h-35.29l-129.3 150.3L119.11 0H0l156.16 227.27L0 408.79h35.29l136.54-158.72 109.06 158.72H400l-161.95-235.7Zm-48.33 56.18-15.82-22.63L48 26.56h54.2l101.6 145.33 15.82 22.63 132.07 188.91h-54.2L189.72 229.28Z"></path></svg></a><a href="https://www.facebook.com/%E6%9D%BE%E4%B9%83%E6%9C%A8%E9%A3%AF%E5%BA%97-129272750454251/" data-sns="facebook" target="_blank" class="snsButton sns_facebook "><i class="fab fa-facebook-f"></i></a><a href="http://line.me/ti/p/%40ihp8156y" data-sns="line" target="_blank" class="snsButton sns_line "><i class="fab fa-line"></i></a><a href="https://www.instagram.com/matunokihanten/" data-sns="insta" target="_blank" class="snsButton sns_insta "><i class="fab fa-instagram"></i></a></div></div><a href="http://maps.google.co.jp/maps?q=静岡県袋井市山科3224-2" target="_blank"><p class="fadd   line_m lchar" style="">
-            静岡県袋井市山科3224-2
-            </p></a><a href="tel:0538-43-3398"><p class="ftel   line_m lchar" style="">
-          0538-43-3398
-          </p></a><p class="fcpy   line_m lchar" style="">matunokihanten@ybb.ne.jp</p></div></div></div><script src="/static/js/sns.js?1742621170.0424142"></script><script src="/static/js/access-log.js?1742621170.0424142"></script><script src="/static/js/slick/slick.min.js"></script><script src="/static/js/slick/slick-action.js"></script><script src="/static/js/shop_item-parts.js?1742621170.0424142"></script><script src="/static/js/obi.js"></script><script src="/static/js/jquery-modal/jquery.modal.min.js"></script><script src="/static/js/jquery-modal/jquery-modal-netshop.js?1742621170.0424142"></script><script src="/static/js/jquery-fancybox/jquery.fancybox.min.js"></script><script src="/static/js/fancybox.js"></script><script src="/static/js/colorbox/jquery.colorbox-min.js"></script><script src="/static/js/colorbox/colorbox-custom.js?1742621170.0424142"></script><script src="/static/js/animation.js?1742621170.0424142"></script><script src="/static/js/fitie.js"></script><script src="/static/js/youtube.js?1742621170.0424142"></script><script src="/static/js/intersection-observer.js"></script><script src="/static/js/lazyload.min.js"></script><script>
-      $(function(){
-        $("img[data-lazy-src]")
-          .attr('src', '/static/img/loading.gif')
-          .on('load.lazy', function(e) {
-            if(e.target.getAttribute('src') === e.target.getAttribute('data-lazy-src')) {
-              e.target.removeAttribute('data-lazy-src');
-              $(e.target).off('load.lazy');
-            }
-          });
-        
-        if(typeof $("img[data-lazy-src]").lazyload === "function") {
-          $("img[data-lazy-src]").lazyload({src: 'data-lazy-src', rootMargin: "300px"});
+  <!-- Section 5: ライブプレゼンテーション用デモツール -->
+  <div class="section" id="live-demo">
+    <h2>5. ライブプレゼンテーション用デモツール</h2>
+    <p>
+      実行版とエスケープ版をトグル切り替え。プレゼンテーションでコードの動作とソースを交互に表示できます。
+    </p>
+    <button onclick="toggleLiveDemo()">表示モードを切り替える</button>
+    <div id="liveDemoContainer" style="margin-top: 15px;">
+      <div id="liveExecuted">
+        <h3>実行版</h3>
+        <div id="liveExecutedContent" style="border:1px solid var(--border-color); padding: 10px;">
+          <p>これは実行されたコードの例です。</p>
+        </div>
+        <button class="copy-btn" onclick="copyToClipboard('liveExecutedContent')">コピー実行版</button>
+      </div>
+      <div id="liveEscaped" style="display:none">
+        <h3>エスケープ版</h3>
+        <pre id="liveEscapedContent">&lt;p&gt;これは実行されたコードの例です。&lt;/p&gt;</pre>
+        <button class="copy-btn" onclick="copyToClipboard('liveEscapedContent', true)">コピーエスケープ版</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 6: WebベースIDEデモ -->
+  <div class="section" id="ide-demo">
+    <h2>6. WebベースIDEデモ</h2>
+    <p>
+      入力と同時に実行結果とエスケープされたソースコードを表示する簡易オンラインIDE。  
+      入力内容は自動保存され、ページ再訪時に復元します。また、コードの内容をテキストファイルとしてダウンロードできます。
+    </p>
+    <textarea id="ideInput" placeholder="ここにコードを入力してください" oninput="idePreview(); autoSave('ideInput')"></textarea>
+    <div class="btn-group">
+      <button onclick="downloadCode('ideInput')">コードをダウンロード</button>
+      <button onclick="clearInput('ideInput', 'ideOutput', 'ideSourceOutput')">リセット</button>
+    </div>
+    <h3>実行結果</h3>
+    <div id="ideOutput" style="border:1px solid var(--border-color); padding:10px;"></div>
+    <button class="copy-btn" onclick="copyToClipboard('ideOutput')">コピー実行結果</button>
+    <h3>ソースコード (エスケープ版)</h3>
+    <pre id="ideSourceOutput"></pre>
+    <button class="copy-btn" onclick="copyToClipboard('ideSourceOutput', true)">コピーエスケープ版</button>
+  </div>
+
+  <script>
+    // HTMLエスケープ用のヘルパー関数
+    function escapeHtml(unsafe) {
+      if (!unsafe) return "";
+      return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // 1. コードスニペット共有機能
+    function shareCode() {
+      var input = document.getElementById('shareInput').value;
+      var escaped = escapeHtml(input);
+      document.getElementById('shareOutput').innerHTML = "<pre>" + escaped + "</pre>" +
+        '<button class="copy-btn" onclick="copyText(\'' + encodeURIComponent(escaped) + '\')">コピー</button>';
+    }
+
+    // 3. リアルタイムコード比較ツールの処理
+    function compareCode() {
+      var input = document.getElementById('compareInput').value;
+      document.getElementById('renderOutput').innerHTML = input;
+      document.getElementById('escapeOutput').textContent = escapeHtml(input);
+    }
+
+    // 4. 自動エスケープ・セキュリティ診断
+    function diagnoseSecurity() {
+      var input = document.getElementById('securityInput').value;
+      var diagnosis = "";
+      // <script>タグのチェック
+      if(input.match(/<script[\s\S]*?>[\s\S]*?<\/script>/i)) {
+        diagnosis += "警告: 入力に <script> タグが含まれています。エスケープが必要です。\n";
+      }
+      // インラインイベントハンドラのチェック (例: onclick=)
+      if(input.match(/on\w+\s*=/i)) {
+        diagnosis += "警告: インラインイベントハンドラが検出されました。セキュリティ上のリスクがあります。\n";
+      }
+      if(diagnosis === "") {
+        diagnosis = "入力されたコードには大きな問題は見受けられません。";
+      }
+      document.getElementById('diagnosisOutput').textContent = diagnosis;
+    }
+
+    // 共通のリセット関数（引数に指定したIDの要素をクリア）
+    function clearInput() {
+      for (let i = 0; i < arguments.length; i++) {
+        let element = document.getElementById(arguments[i]);
+        if (element.tagName === "TEXTAREA") {
+          element.value = "";
         } else {
-          $("img[data-lazy-src]").each(function(i, elem) {
-            elem.setAttribute('src', elem.getAttribute('data-lazy-src'));
-          });
+          element.innerHTML = "";
+          element.textContent = "";
         }
+      }
+    }
+
+    // 5. ライブデモ用の表示モード切替
+    function toggleLiveDemo() {
+      var executed = document.getElementById('liveExecuted');
+      var escaped = document.getElementById('liveEscaped');
+      if(executed.style.display === "none") {
+          executed.style.display = "block";
+          escaped.style.display = "none";
+      } else {
+          executed.style.display = "none";
+          escaped.style.display = "block";
+      }
+    }
+
+    // 6. IDEプレビュー機能
+    function idePreview() {
+      var input = document.getElementById('ideInput').value;
+      document.getElementById('ideOutput').innerHTML = input;
+      document.getElementById('ideSourceOutput').textContent = escapeHtml(input);
+    }
+
+    // 指定した要素の内容をコピーする関数
+    function copyToClipboard(elementId, isPreformatted) {
+      var element = document.getElementById(elementId);
+      var text = isPreformatted ? element.textContent : element.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("コピーしました！");
+      }, () => {
+        alert("コピーに失敗しました。");
       });
-    </script><script src="/static/js/lazysizes.min.js" ></script><script src="/static/js/ls.unveilhooks.min.js"></script><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></body></html>
+    }
+    
+    // シェアの部分用のコピー（エスケープされた文字列）関数
+    function copyText(escaped) {
+      let text = decodeURIComponent(escaped);
+      navigator.clipboard.writeText(text).then(() => {
+        alert("コピーしました！");
+      }, () => {
+        alert("コピーに失敗しました。");
+      });
+    }
+    
+    // テーマ切替用の関数（ダーク/ライト）
+    function toggleTheme() {
+      document.body.classList.toggle('dark-theme');
+    }
+    
+    // IDE入力の自動保存（ローカルストレージ）
+    function autoSave(inputId) {
+      var code = document.getElementById(inputId).value;
+      localStorage.setItem('savedCode', code);
+    }
+    
+    // ページロード時に自動保存したコードを復元
+    document.addEventListener("DOMContentLoaded", function() {
+      var savedCode = localStorage.getItem('savedCode');
+      if(savedCode) {
+        document.getElementById('ideInput').value = savedCode;
+        idePreview();
+      }
+    });
+    
+    // IDEのコードをテキストファイルとしてダウンロード
+    function downloadCode(inputId) {
+      var code = document.getElementById(inputId).value;
+      var blob = new Blob([code], { type: 'text/plain' });
+      var link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "code.txt";
+      link.click();
+    }
+  </script>
+</body>
+</html>
