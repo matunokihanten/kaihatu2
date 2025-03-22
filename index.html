@@ -1,281 +1,37 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="utf-8">
-    <title>脳トレ部屋 | 松乃木飯店</title>
-    <meta name="description" content="ホームページ管理者が一生懸命作りました">
-    
-    <style>
-        body {
-            font-family: 'Noto Sans JP', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        header {
-            background-color: #333;
-            color: #fff<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>豪華な立体万華鏡アニメーション</title>
-  <style>
-    /* ブラウザ全体に表示 */
-    body, html {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: #000;
-    }
-    canvas {
-      display: block;
-    }
-  </style>
-</head>
-<body>
-  <canvas id="kaleido"></canvas>
-  <script>
-    // メインキャンバスの設定
-    const canvas = document.getElementById("kaleido");
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const ctx = canvas.getContext("2d");
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
 
-    // 万華鏡のセグメント数を以前より増やして16に
-    const segments = 16;
-    const stepAngle = (2 * Math.PI) / segments;
-    
-    // 緩やかな全体回転用
-    let globalAngle = 0;
 
-    // 豪華なパターンのためにオフスクリーンキャンバスを拡大（800x800）
-    const patternCanvas = document.createElement("canvas");
-    patternCanvas.width = 800;
-    patternCanvas.height = 800;
-    const pCtx = patternCanvas.getContext("2d");
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>脳トレ部屋 | 松乃木飯店</title><meta name="description" content="ホームページ管理者が一生懸命作りました"><link rel="stylesheet" href="/static/js/slick/slick.css"><link rel="stylesheet" href="/static/css/default_style.css?1742621170.0424142"><link rel="stylesheet" href="/static/css/color014.css?1742621170.0424142"><link rel="stylesheet" href="/static/css/parts_style.css?1742621170.0424142"><link rel="stylesheet" href="/static/css/fontawesome_all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/static/css/obistyle.css?1742621170.0424142"><link rel="stylesheet" href="/static/css/protectionstyle.css?1742621170.0424142"><link rel="stylesheet" href="/static/js/colorbox/colorbox.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/static/js/jquery-modal/jquery.modal.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/static/js/jquery-fancybox/jquery.fancybox.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/static/css/blog.css?1742621170.0424142"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Noto+Serif+JP&family=M+PLUS+1p&family=M+PLUS+Rounded+1c&family=Sawarabi+Mincho&family=Sawarabi+Gothic&family=Kosugi+Maru&family=Kosugi&family=Yusei+Magic&family=Hachi+Maru+Pop&family=Potta+One&family=DotGothic16&family=RocknRoll+One&family=Stick&family=Reggae+One&display=swap" media="print" onload="this.media='all'"><meta name="format-detection" content="telephone=no"><meta name="referrer" content="no-referrer-when-downgrade"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /><meta property="og:title" content="脳トレ部屋 | 松乃木飯店"/><meta property="og:type" content="website"/><meta property="og:url" content="https://ldbyq.crayonsite.com/p/61/"/><meta property="og:site_name" content="松乃木飯店"/><meta property="og:description" content="ホームページ管理者が一生懸命作りました"/><meta property="og:image" content="https:"/><link rel="icon" href="//crayonimg.e-shops.jp/cms-dimg/1124499/905735/401_101.png" sizes="48x48" type="image/png" media="all"><link rel="apple-touch-icon-precomposed" href="//crayonimg.e-shops.jp/cms-dimg/1124499/905735/401_101.png" type="image/png" media="all"><script src="/static/js/jquery-1.11.2.min.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-90577940-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-    function createLuxuryPattern() {
-      // オフスクリーン背景（黒）を描画
-      pCtx.fillStyle = "#000";
-      pCtx.fillRect(0, 0, patternCanvas.width, patternCanvas.height);
-
-      // キャンバス中央から放射状のグラデーションで奥行きを演出
-      const radialGradient = pCtx.createRadialGradient(
-        patternCanvas.width / 2, patternCanvas.height / 2, 100,
-        patternCanvas.width / 2, patternCanvas.height / 2, patternCanvas.width / 2
-      );
-      radialGradient.addColorStop(0, "rgba(255, 255, 255, 0.1)");
-      radialGradient.addColorStop(1, "rgba(0, 0, 0, 0.7)");
-      pCtx.fillStyle = radialGradient;
-      pCtx.fillRect(0, 0, patternCanvas.width, patternCanvas.height);
-
-      // 複数のランダムな形状やエフェクトを描画して豪華さと立体感を増幅
-      for (let i = 0; i < 150; i++) {
-        pCtx.save();
-        // 中心から放たれる輝きをシュミレーション
-        pCtx.shadowColor = `rgba(${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}, 0.8)`;
-        pCtx.shadowBlur = Math.random() * 10 + 10;
-        // 中心付近に集まるように変換
-        pCtx.translate(patternCanvas.width / 2, patternCanvas.height / 2);
-        pCtx.rotate(Math.random() * 2 * Math.PI);
-        const shapeSize = Math.random() * 80 + 20;
-        // 円形グラデーションで柔らかい輝きを生成
-        const grad = pCtx.createRadialGradient(0, 0, shapeSize * 0.3, 0, 0, shapeSize);
-        grad.addColorStop(0, "rgba(255,255,255,0.5)");
-        grad.addColorStop(1, "rgba(0,0,0,0.0)");
-        pCtx.fillStyle = grad;
-        pCtx.beginPath();
-        // 楕円形を描いて変化をつける
-        pCtx.ellipse(0, 0, shapeSize, shapeSize / 2, 0, 0, Math.PI * 2);
-        pCtx.fill();
-        pCtx.restore();
-      }
-      
-      // 星の瞬きを模した輝く線を追加
-      for (let i = 0; i < 100; i++) {
-        pCtx.save();
-        pCtx.translate(Math.random() * patternCanvas.width, Math.random() * patternCanvas.height);
-        pCtx.rotate(Math.random() * 2 * Math.PI);
-        const rayLength = Math.random() * 50 + 20;
-        pCtx.beginPath();
-        pCtx.moveTo(0, 0);
-        pCtx.lineTo(rayLength, 0);
-        pCtx.lineWidth = Math.random() * 2 + 1;
-        pCtx.strokeStyle = `rgba(255,255,255,${Math.random() * 0.5 + 0.2})`;
-        pCtx.stroke();
-        pCtx.restore();
-      }
-    }
-    createLuxuryPattern();
-
-    // アニメーション描画
-    function animate() {
-      // キャンバス全体をクリア
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      ctx.save();
-      // 中心に移動して全体を回転
-      ctx.translate(centerX, centerY);
-      ctx.rotate(globalAngle);
-
-      // 各セグメントごとに描画
-      for (let i = 0; i < segments; i++) {
-        ctx.save();
-        ctx.rotate(i * stepAngle);
-
-        // セグメント交互に左右反転で鏡面効果
-        if (i % 2 === 0) {
-          ctx.scale(1, -1);
+  gtag('config', 'UA-90577940-2');
+</script><script>
+      var CMS_API_URL = "";
+      var SHOP_ID = 1124499;
+      var CSRF_TOKEN = 'ryGBAnAGO9xbX1u7IAvW3XDluqwqpaFkYkKz5RBXbLiHZTFE28I7eutRFJjmQwkh';
+    </script></head><body class="t-obi obi-color14  " style=""><header class="obiHeader " style=""><div class="obiHeaderInner"><ul id="obinav" class="obiHederNavigation"><li class="naviColorMenu_Bright"><a href="/" title="トップ　" ><span class="" style="">トップ　</span></a></li><li class="naviColorMenu_Bright"><a href="https://www.amazon.co.jp/ref=as_li_ss_tl?&amp;_encoding=UTF8&amp;linkCode=sl2&amp;tag=matunokihan05-22&amp;linkId=cf69714f8c8dd3e4dd92f9b7a6369b18&amp;language=ja_JP" title="amazon" ><span class="" style="">amazon</span></a></li><li class="naviColorMenu_Bright"><a href="https://cr-reserve.e-shops.jp/menu/2049/" title="ご予約申し込み" ><span class="" style="">ご予約申し込み</span></a></li><li class="naviColorMenu_Bright"><a href="/p/8/" title="お問い合わせ" ><span class="" style="">お問い合わせ</span></a></li><li class="naviColorMenu_Bright"><a href="/p/6/" title="持ち帰り専用ページ" ><span class="" style="">持ち帰り専用ページ</span></a></li><li class="naviColorMenu_Bright"><a href="http://linoit.com/users/matunokihanten/canvases/%E6%9D%BE%E4%B9%83%E6%9C%A8%E9%A3%AF%E5%BA%97%E4%BB%98%E7%AE%8B" title="付箋" ><span class="" style="">付箋</span></a></li><li class="naviColorMenu_Bright"><a href="/p/31/" title="管理人の部屋" ><span class="" style="">管理人の部屋</span></a></li><li class="naviColorMenu_Bright"><a href="/blog/" title="ブログ" ><span class="" style="">ブログ</span></a></li><li class="naviColorMenu_Bright"><a href="/p/61/" title="脳トレ部屋" ><span class="" style="">脳トレ部屋</span></a></li></ul><a id="obiRighter" class="oviHeadRighter  naviColorMenu_Bright" href="#" style="display:none;color:">»</a></div></header><div class="l-pageWrap"><div id="header" class="obiSita"><div class="hd_area mgb_20"><a href="/"><div class="hptn3 "><h1><img src="//crayonimg.e-shops.jp/cms-dimg/1124499/1907677/401_101.png" alt="松乃木飯店"></h1></div></a></div></div><script src="/static/js/header_height_auto.js"></script><script>setImgHeight();</script><div class="articleBox mgb_20  " style=""><div id="container" class="" style=""><div class="text_area mgb_20"><h2 class="editchar clr15 line_m bold  bd_n" style="font-family:&#x27;Hachi Maru Pop&#x27;, cursive;font-size:59px;">脳トレ部屋</h2></div><!-- text_area --><div class="list_area mgb_20"><ul class="list0 "><li class="listh bclr84 xlchar" style=""><div class="txt htxt line_m bld " style="">脳トレなど</div></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/kioku2" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">追跡漢字記憶ゲーム</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/men2.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">担々麺作りゲーム</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/sinkei.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">神経衰弱</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/akadamaidou.html" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">移動する赤玉※触ると玉が消えるよ</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/dotukado" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">ドッツカード</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/irosagasi" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">色探しゲーム　※少しずつ難しくなります</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/irosagasi2" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">色探しゲーム　レベル選択式</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/syunnkann" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">瞬間記憶ゲーム</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/suujikioku" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">数字記憶ゲーム（瞬間記憶型）</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/2suujikioku" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">数字記憶ゲーム（記憶追跡型）</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/suujisagasi" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">重複数字探しゲーム</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/kiriperin" ><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">クリペリン検査</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/sutereo" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">ステレオグラムゲーム</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/sutereo3" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="font-family:&#x27;Noto Sans JP&#x27;, sans-serif;">ステレオグラムゲーム※色付きあり</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li></ul></div><div class="list_area mgb_20"><ul class="list0 list4"><li class="listh bclr23 xlchar" style=""><div class="txt htxt line_m bld " style="">見るだけ脳トレ</div></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/blinkingBall.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">玉点滅※ボタン多数</div><div class="arws"><img src="/static/img/arrow3.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/blinkingBall3.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">玉点滅※自己開発</div><div class="arws"><img src="/static/img/arrow3.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/blinkingBall4.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">玉点滅※新自己開発</div><div class="arws"><img src="/static/img/arrow3.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/blinkingBall2.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">玉点滅※設定可能</div><div class="arws"><img src="/static/img/arrow3.png"></div></a></li><li class="bclr44 xlchar" style=""><a href="https://matunokihanten.github.io/mojikioku/uzumaki.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">渦巻き※心の疲れの消去効果</div><div class="arws"><img src="/static/img/arrow3.png"></div></a></li></ul></div><div class="list_area mgb_20"><ul class="list0 "><li class="listh bclr25 clr11 xlchar" style=""><div class="txt htxt line_m bld uline" style="">仕事で使える小道具</div></li><li class="bclr43 lchar" style=""><a href="https://matunokihanten.github.io/sigoto/dentaku" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">高機能電卓※飲食店専用</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr43 lchar" style=""><a href="https://matunokihanten.github.io/sigoto/keijiban" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">マインドマップ式掲示板メモ帳※機能がありすぎ</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr43 lchar" style=""><a href="https://matunokihanten.github.io/sigoto/kousokumemo.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">高速メモ※とにかく速さ重視</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr43 lchar" style=""><a href="https://matunokihanten.github.io/sigoto/botansettei.html" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">高速実行ボタン製造機※PC用</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li><li class="bclr43 lchar" style=""><a href="https://matunokihanten.github.io/sigoto/aikon" target="_blank" rel="noopener noreferrer"><div class="txt line_l bld " style="">高速アイコン作成※ SVG ＆ ICO 出力形式も対応</div><div class="arws"><img src="/static/img/arrow2.png"></div></a></li></ul></div><div class="img_area mgb_20 img_extension extension_position_center"><a href="https://matunokihanten.github.io/kaihatu1/" class="imgbd img80 bd_n posi_c" style="" target="_blank" rel="noopener noreferrer"><div class="imgtrm"><img src="//crayonimg.e-shops.jp/cms-dimg/1124499/2644271/64_64.png" alt=""></div></a></div><div class="free_area"><script type="text/javascript" src="//36500632.ranking.fc2.com/analyze.js" charset="utf-8"></script></div><!-- text_area --><div class="free_area"><!-- FC2カウンター ここから -->
+現在の閲覧者数:<script language="javascript" type="text/javascript" src="//counter1.fc2.com/views.php?id=89511217"></script><noscript><img src="//counter1.fc2.com/counter_now.php?id=89511217" /></noscript><!-- FC2カウンター ここまで --></div><!-- text_area --><div class="free_area"><script src="//accaii.com/matunoki/script.js" async></script><noscript><img src="//accaii.com/matunoki/script?guid=on"></noscript></div><!-- text_area --><div class="free_area"><a href="//accaii.com/matunoki/"><img src="//accaii.com/matunoki/counter.png" style="width:240px;height:45px;vertical-align:middle;" /></a></div><!-- text_area --></div></div></div><div id="footer"><div class="ft_area " style=""><div class="obiFooterInner"><div class="snstable"><div class="l-snsButton sns_l line_m"><a href="https://twitter.com/matunokihanten" data-sns="twitter" target="_blank" class="snsButton2 sns_X "><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 408.79"><path d="M238.05 173.09 386.96 0h-35.29l-129.3 150.3L119.11 0H0l156.16 227.27L0 408.79h35.29l136.54-158.72 109.06 158.72H400l-161.95-235.7Zm-48.33 56.18-15.82-22.63L48 26.56h54.2l101.6 145.33 15.82 22.63 132.07 188.91h-54.2L189.72 229.28Z"></path></svg></a><a href="https://www.facebook.com/%E6%9D%BE%E4%B9%83%E6%9C%A8%E9%A3%AF%E5%BA%97-129272750454251/" data-sns="facebook" target="_blank" class="snsButton sns_facebook "><i class="fab fa-facebook-f"></i></a><a href="http://line.me/ti/p/%40ihp8156y" data-sns="line" target="_blank" class="snsButton sns_line "><i class="fab fa-line"></i></a><a href="https://www.instagram.com/matunokihanten/" data-sns="insta" target="_blank" class="snsButton sns_insta "><i class="fab fa-instagram"></i></a></div></div><a href="http://maps.google.co.jp/maps?q=静岡県袋井市山科3224-2" target="_blank"><p class="fadd   line_m lchar" style="">
+            静岡県袋井市山科3224-2
+            </p></a><a href="tel:0538-43-3398"><p class="ftel   line_m lchar" style="">
+          0538-43-3398
+          </p></a><p class="fcpy   line_m lchar" style="">matunokihanten@ybb.ne.jp</p></div></div></div><script src="/static/js/sns.js?1742621170.0424142"></script><script src="/static/js/access-log.js?1742621170.0424142"></script><script src="/static/js/slick/slick.min.js"></script><script src="/static/js/slick/slick-action.js"></script><script src="/static/js/shop_item-parts.js?1742621170.0424142"></script><script src="/static/js/obi.js"></script><script src="/static/js/jquery-modal/jquery.modal.min.js"></script><script src="/static/js/jquery-modal/jquery-modal-netshop.js?1742621170.0424142"></script><script src="/static/js/jquery-fancybox/jquery.fancybox.min.js"></script><script src="/static/js/fancybox.js"></script><script src="/static/js/colorbox/jquery.colorbox-min.js"></script><script src="/static/js/colorbox/colorbox-custom.js?1742621170.0424142"></script><script src="/static/js/animation.js?1742621170.0424142"></script><script src="/static/js/fitie.js"></script><script src="/static/js/youtube.js?1742621170.0424142"></script><script src="/static/js/intersection-observer.js"></script><script src="/static/js/lazyload.min.js"></script><script>
+      $(function(){
+        $("img[data-lazy-src]")
+          .attr('src', '/static/img/loading.gif')
+          .on('load.lazy', function(e) {
+            if(e.target.getAttribute('src') === e.target.getAttribute('data-lazy-src')) {
+              e.target.removeAttribute('data-lazy-src');
+              $(e.target).off('load.lazy');
+            }
+          });
+        
+        if(typeof $("img[data-lazy-src]").lazyload === "function") {
+          $("img[data-lazy-src]").lazyload({src: 'data-lazy-src', rootMargin: "300px"});
+        } else {
+          $("img[data-lazy-src]").each(function(i, elem) {
+            elem.setAttribute('src', elem.getAttribute('data-lazy-src'));
+          });
         }
-
-        // くさび状のパスを定義してクリップ（立体感のベース）
-        ctx.beginPath();
-        const radius = Math.sqrt(centerX * centerX + centerY * centerY);
-        ctx.arc(0, 0, radius, -stepAngle / 2, stepAngle / 2);
-        ctx.closePath();
-        ctx.clip();
-
-        // 各セグメントにシャドウエフェクトを追加
-        ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
-        ctx.shadowBlur = 20;
-
-        // オフスクリーンキャンバスの豪華パターンを描画
-        ctx.drawImage(
-          patternCanvas,
-          -patternCanvas.width / 2,
-          -patternCanvas.height / 2
-        );
-        ctx.restore();
-      }
-      ctx.restore();
-
-      // 緩やかに全体を回転（豪華さを引き立たせるゆったり感）
-      globalAngle += 0.002;
-      
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    // サイズ変更時にキャンバスを再調整
-    window.addEventListener("resize", () => {
-      canvas.width  = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-  </script>
-</body>
-</html>;
-            padding: 10px 0;
-            text-align: center;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-        }
-        nav ul li {
-            display: inline;
-            margin: 0 15px;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-        }
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 20px;
-        }
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
-        .articleBox {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .list_area {
-            margin-top: 20px;
-        }
-        .list_area ul {
-            list-style: none;
-            padding: 0;
-            display: flex; /* Flexboxを使用 */
-            flex-wrap: wrap; /* 折り返しを有効 */
-        }
-        .list_area li {
-            width: 25%; /* 4列にするために幅を25%に設定 */
-            margin: 10px 0;
-            padding: 0 10px; /* 左右に余白を追加 */
-            box-sizing: border-box; /* paddingを含めて幅を計算 */
-        }
-        .list_area a {
-            text-decoration: none;
-            color: #333;
-            display: block; /* ブロック要素に変更 */
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            height: 100%; /* 高さをliに合わせる */
-        }
-        .list_area a:hover {
-            background-color: #f0f0f0;
-        }
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 20px 0;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>松乃木飯店</h1>
-        <nav>
-            <ul>
-                <li><a href="https://ldbyq.crayonsite.com/">トップ</a></li>
-                <li><a href="https://ldbyq.crayonsite.com/p/61/">脳トレ部屋</a></li>
-            </ul>
-        </nav>
-    </header>
-    <div class="container">
-        <div class="articleBox">
-            <h2>脳トレなど</h2>
-            <div class="list_area">
-                <ul>
-                    <li><a href="https://matunokihanten.github.io/mojikioku/kioku2" target="_blank">追跡漢字記憶ゲーム</a></li>
-                    <li><a href="https://matunokihanten.github.io/mojikioku/men2.html">担々麺作りゲーム</a></li>
-                    <li><a href="https://matunokihanten.github.io/mojikioku/sinkei.html">神経衰弱</a></li>
-                    <li><a href="https://matunokihanten.github.io/mojikioku/blinkingBall.html">玉点滅</a></li>
-                    <li><a href="https://matunokihanten.github.io/mojikioku/blinkingBall2.html">玉点滅設定可能</a></li>
-                    <li><a href="https://matunokihanten.github.io/mojikioku/akadamaidou.html">移動する赤玉※触ると玉が消えるよ</a></li>
-                    <li><a href="https://matunokihanten.github.io/mojikioku/dotukado">ドッツカード</a></li>
-                    <li><a href="https://matunokihanten.github.io/mojikioku/irosagasi">色探しゲーム　※少しずつ難しくなります</a></li>
-                    <li><a href="https://matunokihanten.github.io/mojikioku/irosagasi2">色探しゲーム　レベル選択式</a></li>
-                    <li><a href="https://matunokihanten.github.io/mojikioku/syunnkann">瞬間記憶ゲーム</a></li>
-                    <li><a href="https://matunokihanten.github.io/mojikioku/suujikioku">数字記憶ゲーム</a></li>
-                    <li><a href="https://matunokihanten.github.io/mojikioku/kiriperin">クリペリン検査</a></li>
-                    <li><a href="https://matunokihanten.github.io/mojikioku/sutereo" target="_blank">ステレオグラムゲーム</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <footer>
-        <p>静岡県袋井市山科3224-2</p>
-        <p>電話: <a href="tel:0538-43-3398">0538-43-3398</a></p>
-        <p>メール: <a href="mailto:matunokihanten@ybb.ne.jp">matunokihanten@ybb.ne.jp</a></p>
-    </footer>
-    <script src="//accaii.com/matunoki/script.js" async></script>
-    <noscript><img src="//accaii.com/matunoki/script?guid=on" alt="アクセスカウンター"></noscript>
-    <a href="//accaii.com/matunoki/"><img src="//accaii.com/matunoki/counter.png" style="width:80px;height:15px;vertical-align:middle;" alt="アクセスカウンター" /></a>
-</body>
-</html>
+      });
+    </script><script src="/static/js/lazysizes.min.js" ></script><script src="/static/js/ls.unveilhooks.min.js"></script><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></body></html>
