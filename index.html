@@ -1,170 +1,24 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>総合デモ: エスケープコードと各機能の統合</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
-    .section { border:1px solid #ccc; padding: 15px; margin-bottom: 20px; }
-    pre { background-color: #f9f9f9; padding: 10px; overflow-x: auto; }
-    textarea { width: 100%; height: 100px; padding: 5px; }
-    button { margin-top: 10px; padding: 5px 10px; }
-    h2 { color: #333; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase チャットルーム</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        ul { list-style: none; padding: 0; }
+        li { padding: 8px; background: #f4f4f4; margin: 5px 0; }
+        input { padding: 10px; width: 70%; margin-right: 5px; }
+    </style>
 </head>
 <body>
-
-<!-- Section 1: コードスニペット共有 -->
-<div class="section" id="snippet-sharing">
-  <h2>1. コードスニペット共有</h2>
-  <p>
-    コードを入力すると、エスケープされたコードとして下に表示します。  
-    ユーザーが安全にコードを投稿・共有できる仕組みです。
-  </p>
-  <textarea id="shareInput" placeholder="ここにコードを入力してください"></textarea><br>
-  <button onclick="shareCode()">コードを共有する</button>
-  <div id="shareOutput"></div>
-</div>
-
-<!-- Section 2: オンラインセキュリティチュートリアル -->
-<div class="section" id="security-tutorial">
-  <h2>2. HTMLエスケープの重要性セミナー</h2>
-  <p>
-    HTMLエスケープは、悪意あるコードの注入を防ぐための基本技術です。  
-    たとえば、入力欄にスクリプトタグが含まれていると、XSS攻撃のリスクが高まります。  
-    以下はエスケープされたコードと生のコードの違いを示す例です。
-  </p>
-  <h3>生のコードの例</h3>
-  <div style="border:1px dashed #aaa; padding: 10px;">
-    <script>
-      document.write("これは実行されるコードです。");
-    </script>
-  </div>
-  <h3>エスケープされたコードの例</h3>
-  <pre>&lt;script&gt;document.write("これは実行されるコードです。");&lt;/script&gt;</pre>
-</div>
-
-<!-- Section 3: リアルタイムコード比較ツール -->
-<div class="section" id="code-comparison">
-  <h2>3. リアルタイムコード比較ツール</h2>
-  <p>
-    コードを入力すると、実行版（レンダリング結果）とエスケープ版（ソース表示）をリアルタイムで比較できます。  
-    これにより、コードが実際にどのように解釈されるかを確認できます。
-  </p>
-  <textarea id="compareInput" placeholder="ここにコードを入力してください" oninput="compareCode()"></textarea>
-  <h3>実行版 (レンダリング結果)：</h3>
-  <div id="renderOutput" style="border:1px solid #ddd; padding:10px;"></div>
-  <h3>エスケープ版 (ソース表示)：</h3>
-  <pre id="escapeOutput"></pre>
-</div>
-
-<!-- Section 4: 自動エスケープ・セキュリティ診断ツール -->
-<div class="section" id="security-diagnostic">
-  <h2>4. 自動エスケープ・セキュリティ診断ツール</h2>
-  <p>
-    入力されたコードに潜む危険性をチェックします。  
-    たとえば、<code>&lt;script&gt;</code> タグが含まれている場合は、警告を表示します。
-  </p>
-  <textarea id="securityInput" placeholder="コードを入力してください"></textarea><br>
-  <button onclick="diagnoseSecurity()">診断する</button>
-  <div id="diagnosisOutput" style="margin-top:10px; white-space: pre-wrap;"></div>
-</div>
-
-<!-- Section 5: ライブプレゼンテーション用デモツール -->
-<div class="section" id="live-demo">
-  <h2>5. ライブプレゼンテーション用デモツール</h2>
-  <p>
-    実行版とエスケープ版をトグル切り替えできるツールです。  
-    プレゼンテーション時にコードの動作とソース状態を切り替えて見せる用途に最適です。
-  </p>
-  <button onclick="toggleLiveDemo()">表示モードを切り替える</button>
-  <div id="liveDemoContainer" style="margin-top: 15px;">
-      <div id="liveExecuted">
-         <h3>実行版</h3>
-         <div id="liveExecutedContent" style="border:1px solid #ddd; padding: 10px;">
-           <p>これは実行されたコードの例です。</p>
-         </div>
-      </div>
-      <div id="liveEscaped" style="display:none">
-         <h3>エスケープ版</h3>
-         <pre id="liveEscapedContent">&lt;p&gt;これは実行されたコードの例です。&lt;/p&gt;</pre>
-      </div>
-  </div>
-</div>
-
-<!-- Section 6: WebベースIDEデモ -->
-<div class="section" id="ide-demo">
-  <h2>6. WebベースIDEデモ</h2>
-  <p>
-    オンラインIDEのように、コードを編集しながら実行結果とエスケープされたソースコードを確認できます。  
-    HTML や JavaScript の学習に役立ちます。
-  </p>
-  <textarea id="ideInput" placeholder="ここにコードを入力してください" oninput="idePreview()"></textarea>
-  <h3>実行結果</h3>
-  <div id="ideOutput" style="border:1px solid #ddd; padding:10px;"></div>
-  <h3>ソースコード (エスケープ版)</h3>
-  <pre id="ideSourceOutput"></pre>
-</div>
-
-<script>
-// HTMLエスケープ用のヘルパー関数
-function escapeHtml(unsafe) {
-  return unsafe
-         .replace(/&/g, "&amp;")
-         .replace(/</g, "&lt;")
-         .replace(/>/g, "&gt;")
-         .replace(/"/g, "&quot;")
-         .replace(/'/g, "&#039;");
-}
-
-// 1. コードスニペット共有機能
-function shareCode() {
-  var input = document.getElementById('shareInput').value;
-  var escaped = escapeHtml(input);
-  document.getElementById('shareOutput').innerHTML = "<pre>" + escaped + "</pre>";
-}
-
-// 3. リアルタイムコード比較ツールの処理
-function compareCode() {
-  var input = document.getElementById('compareInput').value;
-  // 実行結果（注意：入力内容がそのままレンダリングされるため、実際の運用時は十分な検証を）
-  document.getElementById('renderOutput').innerHTML = input;
-  // エスケープ版の表示
-  document.getElementById('escapeOutput').textContent = escapeHtml(input);
-}
-
-// 4. 自動エスケープ・セキュリティ診断
-function diagnoseSecurity() {
-  var input = document.getElementById('securityInput').value;
-  var diagnosis = "";
-  // 簡易的なチェック: <script>タグがあるかを検出
-  if(input.match(/<script[\s\S]*?>[\s\S]*?<\/script>/i)) {
-      diagnosis += "警告: 入力に <script> タグが含まれています。エスケープが必要です。\n";
-  } else {
-      diagnosis += "入力されたコードには大きな問題は見受けられません。";
-  }
-  document.getElementById('diagnosisOutput').textContent = diagnosis;
-}
-
-// 5. ライブデモでの表示モードを切り替え
-function toggleLiveDemo() {
-  var executed = document.getElementById('liveExecuted');
-  var escaped = document.getElementById('liveEscaped');
-  if(executed.style.display === "none") {
-      executed.style.display = "block";
-      escaped.style.display = "none";
-  } else {
-      executed.style.display = "none";
-      escaped.style.display = "block";
-  }
-}
-
-// 6. WebベースIDEデモのプレビュー機能
-function idePreview() {
-  var input = document.getElementById('ideInput').value;
-  document.getElementById('ideOutput').innerHTML = input;
-  document.getElementById('ideSourceOutput').textContent = escapeHtml(input);
-}
-</script>
+    <h1>Firebase チャットルーム</h1>
+    <ul id="messages"></ul>
+    <form id="form">
+        <input id="username" placeholder="ユーザー名" required>
+        <input id="message" placeholder="メッセージ" required>
+        <button type="submit">送信</button>
+    </form>
+    <script type="module" src="./chat.js"></script>
 </body>
 </html>
